@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import Upload
 # Create your views here.
 
 def index(request):
@@ -87,16 +88,29 @@ def logoutUser(request):
 
 def uploadPdf(request):
     if request.method == "POST":
-        form = PdfForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
+        pdfFile = request.FILES["file"]
+        if pdfFile.name.endswith(".pdf"):
+            upload = Upload(file=pdfFile)
+            upload.save()
+            messages.success(request,"File uploaded successfully")
+            return redirect("data")
+            
+        else:
+            messages.error(request,"File not uploaded or Invalid file format")
             return redirect("index")
-    else:
-        form = PdfForm()
+
+    messages.error(request,"File not uploaded")
     return render(
         request,
-        "upload.html",
-        {
-            "form":form
-        }
+        "index.html"
     )
+
+
+def data(request):
+    return render(
+        request,
+        "data.html"
+    )
+
+def pdfToText(request):
+    pass

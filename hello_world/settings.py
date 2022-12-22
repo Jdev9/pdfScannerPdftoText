@@ -36,10 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-if 'CODESPACE_NAME' in os.environ:
-    codespace_name = os.getenv("CODESPACE_NAME")
-    codespace_domain = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
-    CSRF_TRUSTED_ORIGINS = [f'https://{codespace_name}-8000.{codespace_domain}']
+
 
 # Application definition
 
@@ -50,7 +47,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_browser_reload",
     'base',
 ]
 
@@ -62,7 +58,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 X_FRAME_OPTIONS = "ALLOW-FROM preview.app.github.dev"
@@ -148,3 +143,4 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

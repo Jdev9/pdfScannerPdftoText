@@ -3,7 +3,11 @@ from django.contrib.auth import authenticate,login,logout
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Upload
+from .models import Upload,TextData
+import PyPDF2
+import os 
+from django.http import HttpResponse,HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def index(request):
@@ -85,19 +89,42 @@ def logoutUser(request):
     messages.success(request,"Logout successful")
     return redirect("index")
 
-
+@login_required(login_url="login")
 def uploadPdf(request):
     if request.method == "POST":
         pdfFile = request.FILES["file"]
         if pdfFile.name.endswith(".pdf"):
-            upload = Upload(file=pdfFile)
-            upload.save()
-            messages.success(request,"File uploaded successfully")
-            return redirect("data")
+            try:
+
+                upload = Upload(user=request.user,file=pdfFile)
+                # if uploaded.file exists then first delete it
+                upload.save()
+                textData = TextData(text=upload,data=pdfToText(upload.file.name))
+                textData.save()
+                messages.success(request,"File uploaded successfully")
+            except:
+                messages.error(request,"File not uploaded")
+                return render(
+                    request,
+                    "index.html"
+                )
+            # uploaded file details
+            file = Upload.objects.last()
+            return render(
+                request,
+                'index.html',
+                {
+                    'data': pdfToText(file.file.name),
+                    'files': Upload.objects.filter(user=request.user)
+                }
+            )
             
         else:
             messages.error(request,"File not uploaded or Invalid file format")
-            return redirect("index")
+            return render(
+                request,
+                "index.html"
+            )
 
     messages.error(request,"File not uploaded")
     return render(
@@ -112,5 +139,19 @@ def data(request):
         "data.html"
     )
 
-def pdfToText(request):
-    pass
+def pdfToText(path):
+    pdfreader = PyPDF2.PdfFileReader(path)
+    no_of_pages = pdfreader.numPages
+    with open('final_txt.txt', 'w') as f:
+        for i in range(0, no_of_pages):
+            try:
+                pagObj = pdfreader.getPage(i)
+                f.write(pagObj.extractText())
+            except:
+                pass
+    with open('final_txt.txt', 'r') as f:
+        text = f.read()
+    if os.path.exists("final_txt.txt"):
+        os.remove("final_txt.txt")
+        return text
+

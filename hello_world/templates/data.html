@@ -3,6 +3,30 @@
 
 
 {% block content %}
-    details
+<form action="">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th>File Name</th>
+            <th>File Path</th>
+        </tr>
+        {% for file in files %}
+            <tr>
+                <td>{{ file.file.name }}</td>
+               
+                <td>{{ file.file.path }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+   
+    
+    {% for file in files %}
+        
+        {% if file %}
+               <p> {{ file.file.name }}</p>
+        {% endif %}
+            
+    {% endfor %}
+</form>
 {% endblock content %}
     

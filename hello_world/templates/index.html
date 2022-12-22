@@ -17,7 +17,7 @@
         <!--display messages-->
       
         <!--form with file input and submit button in center-->
-
+        <div class="container">
                             {% if user.is_authenticated %}
                             <h4 class="text-center"> Hello {{ user.username }}</h4>
                             <h5 class="text-center">You are authenticated</h5>
@@ -128,7 +128,7 @@
                 </div>
             </div>
         </div>
-
+   
 
     {% endblock content %}
         

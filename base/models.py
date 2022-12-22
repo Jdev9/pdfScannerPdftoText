@@ -9,7 +9,7 @@ class Upload(models.Model):
     def __str__(self):
         return self.file.name
 
-    
+
 class TextData(models.Model):
     text = models.OneToOneField(Upload, on_delete=models.CASCADE)
     data = models.TextField()

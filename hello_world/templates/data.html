@@ -1,4 +1,4 @@
-{% extends 'base.html' %}   
+{% extends 'base.html' %}
 
 
 
@@ -11,22 +11,21 @@
             <th>File Path</th>
         </tr>
         {% for file in files %}
-            <tr>
-                <td>{{ file.file.name }}</td>
-               
-                <td>{{ file.file.path }}</td>
-            </tr>
+        <tr>
+            <td>{{ file.file.name }}</td>
+
+            <td>{{ file.file.path }}</td>
+        </tr>
         {% endfor %}
     </table>
-   
-    
+
+
     {% for file in files %}
-        
-        {% if file %}
-               <p> {{ file.file.name }}</p>
-        {% endif %}
-            
+
+    {% if file %}
+    <p> {{ file.file.name }}</p>
+    {% endif %}
+
     {% endfor %}
 </form>
 {% endblock content %}
-    

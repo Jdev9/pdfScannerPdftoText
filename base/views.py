@@ -89,7 +89,7 @@ def logoutUser(request):
     messages.success(request,"Logout successful")
     return redirect("index")
 
-@login_required(login_url="login")
+
 def uploadPdf(request):
     if request.method == "POST":
         pdfFile = request.FILES["file"]
@@ -110,6 +110,7 @@ def uploadPdf(request):
                 )
             # uploaded file details
             file = Upload.objects.last()
+            print(pdfToText(file.file.name))
             return render(
                 request,
                 'index.html',

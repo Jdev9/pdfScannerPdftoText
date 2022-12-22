@@ -37,10 +37,9 @@ git clone https://github.com/Suraj1089/Heart-Charity.git
 ```
 pip install -r requirements.txt
 ```
-```
+
 to know more about database setup, visit https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-```
 
 - Migrate the database
 ```
